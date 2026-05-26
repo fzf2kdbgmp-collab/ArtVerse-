@@ -1,0 +1,1048 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Atelier</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+        :root{--bg:#0a0a11;--primary:#c9a87c;--accent:#a855f7;--text:#eae3d8;--text-light:#7d7670;--card:rgba(201,168,124,0.05);--border:rgba(201,168,124,0.1);--danger:#ef4444;--success:#22c55e;--warning:#eab308}
+        body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;min-height:100dvh;overflow-x:hidden}
+        .bg-fx{position:fixed;inset:0;z-index:0;background:radial-gradient(ellipse at 25% 15%,rgba(201,168,124,0.06) 0%,transparent 55%),radial-gradient(ellipse at 75% 85%,rgba(168,85,247,0.03) 0%,transparent 55%);pointer-events:none}
+        header{position:fixed;top:0;width:100%;z-index:1000;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;background:rgba(10,10,17,0.97);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+        .logo{font-size:26px;font-weight:900;background:linear-gradient(135deg,#d4b896,#c9a87c,#e8d5b8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;cursor:pointer;flex-shrink:0;letter-spacing:-0.5px}
+        .nav-wrap{display:flex;align-items:center}
+        nav{display:none;position:fixed;top:52px;right:0;left:0;bottom:0;background:rgba(10,10,17,0.98);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);flex-direction:column;padding:20px 24px;gap:4px;z-index:999;overflow-y:auto}
+        nav.open{display:flex}
+        nav a{color:var(--text-light);text-decoration:none;font-weight:600;font-size:15px;cursor:pointer;padding:14px 18px;border-radius:14px;width:100%;display:flex;align-items:center;gap:12px}
+        nav a.active{color:var(--primary);background:rgba(201,168,124,0.1);border:1px solid rgba(201,168,124,0.15)}
+        nav a i{font-size:20px}
+        .hamburger{background:none;border:none;color:var(--text);font-size:26px;cursor:pointer;padding:6px;border-radius:10px;display:block}
+        .header-actions{display:flex;gap:6px;align-items:center;flex-shrink:0}
+        .btn{padding:9px 20px;border-radius:50px;font-size:12px;font-weight:700;cursor:pointer;border:none;font-family:'Cairo',sans-serif;display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
+        .btn-primary{background:linear-gradient(135deg,#c9a87c,#d4b896);color:#0a0a11;box-shadow:0 4px 16px rgba(201,168,124,0.2)}
+        .btn-outline{background:transparent;border:1.5px solid var(--primary);color:var(--primary)}
+        .btn-sm{padding:7px 14px;font-size:11px}
+        .btn-danger{background:rgba(239,68,68,0.1);color:var(--danger);border:1px solid rgba(239,68,68,0.2)}
+        .btn-warning{background:rgba(234,179,8,0.1);color:var(--warning);border:1px solid rgba(234,179,8,0.2)}
+        .btn-full{width:100%;justify-content:center}
+        .page{display:none;padding:68px 16px 72px;min-height:100vh;min-height:100dvh;position:relative;z-index:1}
+        .page.active{display:block}
+        .page-title{font-size:24px;font-weight:800;margin-bottom:4px}
+        .page-sub{color:var(--text-light);font-size:13px;margin-bottom:24px}
+        .title-line{width:40px;height:3px;background:linear-gradient(to left,var(--primary),transparent);border-radius:2px;margin-bottom:24px}
+        .hero{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;min-height:calc(100vh - 140px);min-height:calc(100dvh - 140px);padding:20px 0}
+        .hero-logo{font-size:56px;font-weight:900;background:linear-gradient(135deg,#d4b896,#c9a87c,#e8d5b8,#c9a87c);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:20px;letter-spacing:-1px}
+        .hero h1{font-size:28px;font-weight:800;color:#f0e8dc;margin-bottom:12px;line-height:1.4}
+        .hero p{font-size:14px;color:var(--text-light);max-width:320px;margin-bottom:32px;line-height:1.8}
+        .hero .btn{padding:14px 44px;font-size:15px}
+        .stats-bar{position:fixed;bottom:0;left:0;width:100%;display:flex;background:rgba(10,10,17,0.95);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid var(--border);padding:14px 0;z-index:100}
+        .stat-item{flex:1;text-align:center;border-left:1px solid var(--border);padding:0 4px}
+        .stat-item:last-child{border-left:none}
+        .stat-number{font-size:18px;font-weight:800;color:var(--primary);display:block}
+        .stat-label{font-size:10px;color:var(--text-light)}
+        .gallery-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+        .art-card{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden}
+        .art-card img{width:100%;height:140px;object-fit:cover;display:block;cursor:pointer}
+        .art-card-body{padding:10px 12px}
+        .art-card-title{font-size:13px;font-weight:700;margin-bottom:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+        .art-card-artist{font-size:11px;color:var(--text-light);margin-bottom:8px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+        .art-card-stats{display:flex;gap:10px;font-size:11px;color:var(--text-light)}
+        .art-card-stats span{display:flex;align-items:center;gap:3px}
+        .art-card-stats i{font-size:13px;color:var(--primary)}
+        .like-btn{cursor:pointer}
+        .podium{display:flex;justify-content:center;align-items:flex-end;gap:8px;margin-bottom:24px;flex-wrap:wrap}
+        .podium-item{display:flex;flex-direction:column;align-items:center;width:100px}
+        .podium-avatar{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,#1a1a24,#252530);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--text-light);margin-bottom:6px}
+        .podium-item.gold .podium-avatar{border-color:var(--primary);box-shadow:0 0 12px rgba(201,168,124,0.3)}
+        .podium-item.silver .podium-avatar{border-color:#a8a8b0}
+        .podium-item.bronze .podium-avatar{border-color:#b87333}
+        .podium-name{font-size:12px;font-weight:700;margin-bottom:2px;text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:90px}
+        .podium-points{font-size:10px;color:var(--primary);font-weight:600;margin-bottom:8px}
+        .podium-bar{width:100%;border-radius:8px 8px 0 0;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;padding:10px 0}
+        .podium-item.gold .podium-bar{height:80px;background:linear-gradient(180deg,rgba(201,168,124,0.2),rgba(201,168,124,0.05));border:1px solid rgba(201,168,124,0.25);border-bottom:none;color:var(--primary)}
+        .podium-item.silver .podium-bar{height:56px;background:linear-gradient(180deg,rgba(168,168,176,0.15),rgba(168,168,176,0.04));border:1px solid rgba(168,168,176,0.15);border-bottom:none;color:#a8a8b0}
+        .podium-item.bronze .podium-bar{height:40px;background:linear-gradient(180deg,rgba(184,115,51,0.15),rgba(184,115,51,0.04));border:1px solid rgba(184,115,51,0.15);border-bottom:none;color:#b87333}
+        .rank-list{display:flex;flex-direction:column;gap:6px}
+        .rank-item{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--card);border:1px solid var(--border);border-radius:12px}
+        .rank-num{width:26px;height:26px;border-radius:50%;background:rgba(201,168,124,0.1);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:11px;color:var(--primary);flex-shrink:0}
+        .rank-name{font-size:13px;font-weight:600;flex-grow:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+        .rank-arts{font-size:11px;color:var(--text-light);flex-shrink:0}
+        .rank-points{font-size:13px;font-weight:700;color:var(--primary);flex-shrink:0}
+        .editor-area{display:flex;flex-direction:column;gap:14px}
+        .canvas-container{width:100%;max-width:500px;margin:0 auto;aspect-ratio:1/1;background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden}
+        #drawCanvas{width:100%;height:100%;display:block;cursor:crosshair;touch-action:none}
+        .tools-bar{display:flex;gap:6px;flex-wrap:wrap;justify-content:center}
+        .tool-btn{width:44px;height:44px;background:rgba(255,255,255,0.06);border:1px solid var(--border);border-radius:12px;color:var(--text);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
+        .tool-btn.active{border-color:var(--primary);background:rgba(201,168,124,0.12);color:var(--primary)}
+        .tool-btn i{font-size:20px}
+        .color-section{display:flex;flex-direction:column;gap:10px}
+        .color-presets{display:flex;gap:6px;flex-wrap:wrap;justify-content:center}
+        .color-dot{width:30px;height:30px;border-radius:50%;cursor:pointer;border:2px solid transparent;flex-shrink:0}
+        .color-dot.active{border-color:#fff;box-shadow:0 0 8px rgba(255,255,255,0.3)}
+        .color-picker-wrap{display:flex;align-items:center;gap:10px;justify-content:center}
+        .color-picker{width:36px;height:36px;border:2px solid var(--border);border-radius:50%;cursor:pointer;background:none;padding:0;overflow:hidden;flex-shrink:0}
+        .color-picker::-webkit-color-swatch-wrapper{padding:0}
+        .color-picker::-webkit-color-swatch{border:none;border-radius:50%}
+        .slider-row{display:flex;align-items:center;gap:10px;padding:0 4px}
+        .slider-row label{font-size:11px;color:var(--text-light);flex-shrink:0;min-width:55px}
+        .slider-row input[type="range"]{flex-grow:1;-webkit-appearance:none;height:4px;background:rgba(201,168,124,0.15);border-radius:2px;outline:none}
+        .slider-row input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:var(--primary);cursor:pointer}
+        .slider-row span{font-size:11px;color:var(--primary);font-weight:700;min-width:24px;text-align:center}
+        .editor-form{display:flex;flex-direction:column;gap:10px}
+        .fg{display:flex;flex-direction:column;gap:4px}
+        .fg label{font-size:11px;font-weight:600;color:var(--text-light)}
+        .fg input,.fg textarea{width:100%;padding:10px 14px;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:'Cairo',sans-serif;font-size:13px}
+        .fg input:focus,.fg textarea:focus{outline:none;border-color:var(--primary)}
+        .fg textarea{resize:none;height:50px}
+        .profile-header{display:flex;flex-direction:column;align-items:center;margin-bottom:28px}
+        .avatar-upload{position:relative;cursor:pointer;margin-bottom:14px}
+        .avatar-ring{width:90px;height:90px;border-radius:50%;padding:3px;background:linear-gradient(135deg,var(--primary),rgba(201,168,124,0.3));box-shadow:0 0 20px rgba(201,168,124,0.15)}
+        .avatar-inner{width:100%;height:100%;border-radius:50%;background:linear-gradient(135deg,#1a1a24,#252530);display:flex;align-items:center;justify-content:center;font-size:32px;color:var(--primary);font-weight:800;border:3px solid var(--bg);overflow:hidden}
+        .avatar-inner img{width:100%;height:100%;object-fit:cover}
+        .avatar-edit-icon{position:absolute;bottom:0;right:0;width:28px;height:28px;background:var(--primary);border-radius:50%;display:flex;align-items:center;justify-content:center;border:2px solid var(--bg)}
+        .avatar-edit-icon i{font-size:14px;color:#0a0a11}
+        .profile-name{font-size:20px;font-weight:800;margin-bottom:2px}
+        .profile-handle{font-size:13px;color:var(--text-light);margin-bottom:18px;direction:ltr}
+        .profile-stats{display:flex;gap:0;margin-bottom:24px}
+        .profile-stat{padding:0 20px;text-align:center}
+        .profile-stat:not(:last-child){border-left:1px solid var(--border)}
+        .profile-stat-value{font-size:18px;font-weight:800;color:var(--primary);display:block}
+        .profile-stat-label{font-size:11px;color:var(--text-light)}
+        .edit-section{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:20px}
+        .edit-section h3{font-size:14px;font-weight:700;margin-bottom:12px;color:var(--primary)}
+        .artists-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+        .artist-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 12px;text-align:center}
+        .artist-avatar{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,rgba(201,168,124,0.12),rgba(201,168,124,0.04));border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;color:var(--primary);margin:0 auto 8px;overflow:hidden}
+        .artist-avatar img{width:100%;height:100%;object-fit:cover}
+        .artist-name{font-size:13px;font-weight:700;margin-bottom:4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+        .artist-specialty{display:inline-block;padding:2px 10px;background:rgba(201,168,124,0.08);border:1px solid rgba(201,168,124,0.12);border-radius:20px;font-size:10px;font-weight:600;color:var(--primary);margin-bottom:6px}
+        .artist-works{font-size:10px;color:var(--text-light);margin-bottom:10px}
+        .riddles-container{display:flex;flex-direction:column;align-items:center}
+        .lock-icon{margin-bottom:12px;color:var(--accent)}
+        .lock-icon i{font-size:44px}
+        .riddle-card{width:100%;background:var(--card);border:1px solid var(--border);border-right:3px solid var(--primary);border-radius:12px;padding:14px 16px;margin-bottom:10px;display:flex;flex-direction:column;gap:8px}
+        .riddle-header{display:flex;align-items:center;gap:10px}
+        .riddle-number{width:30px;height:30px;border-radius:50%;background:rgba(201,168,124,0.1);border:1px solid var(--primary);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:var(--primary);flex-shrink:0}
+        .riddle-text{font-size:13px;font-weight:600;line-height:1.6;flex-grow:1}
+        .riddle-input{width:100%;padding:10px 14px;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:'Cairo',sans-serif;font-size:13px;text-align:center}
+        .riddle-input:focus{outline:none;border-color:var(--primary)}
+        .admin-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:20px}
+        .admin-stat-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px;display:flex;align-items:center;gap:10px}
+        .admin-stat-icon{width:36px;height:36px;border-radius:10px;background:rgba(201,168,124,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+        .admin-stat-icon i{font-size:18px;color:var(--primary)}
+        .admin-stat-number{font-size:18px;font-weight:800;color:var(--primary);display:block}
+        .admin-stat-label{font-size:10px;color:var(--text-light)}
+        .admin-table{width:100%;background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;overflow-x:auto}
+        .admin-table table{width:100%;border-collapse:collapse;min-width:420px}
+        .admin-table thead{background:rgba(201,168,124,0.06)}
+        .admin-table th{padding:8px 10px;text-align:right;font-size:10px;font-weight:700;color:var(--text-light);border-bottom:1px solid var(--border);white-space:nowrap}
+        .admin-table td{padding:8px 10px;font-size:11px;border-bottom:1px solid rgba(201,168,124,0.05);white-space:nowrap}
+        .admin-table tr:last-child td{border-bottom:none}
+        .status-badge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:9px;font-weight:600}
+        .status-active{background:rgba(34,197,94,0.1);color:#22c55e;border:1px solid rgba(34,197,94,0.2)}
+        .status-suspended{background:rgba(234,179,8,0.1);color:#eab308;border:1px solid rgba(234,179,8,0.2)}
+        .action-btns{display:flex;gap:4px}
+        .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:2000;align-items:center;justify-content:center;padding:16px}
+        .modal-overlay.active{display:flex}
+        .modal{background:#111118;border:1px solid var(--border);border-radius:20px;padding:24px;width:360px;max-width:100%;max-height:90vh;overflow-y:auto}
+        .modal h2{font-size:20px;font-weight:800;margin-bottom:18px;text-align:center}
+        .modal .fg{margin-bottom:10px}
+        .modal .btn{width:100%;justify-content:center;margin-top:4px}
+        .modal-switch{text-align:center;margin-top:12px;font-size:11px;color:var(--text-light)}
+        .modal-switch a{color:var(--primary);cursor:pointer;font-weight:600}
+        .toast{position:fixed;top:64px;left:50%;transform:translateX(-50%) translateY(-14px);background:#1a1a24;border:1px solid var(--border);border-radius:12px;padding:12px 20px;font-size:12px;font-weight:600;z-index:3000;opacity:0;max-width:88%;text-align:center;pointer-events:none;transition:opacity 0.3s,transform 0.3s}
+        .toast.show{opacity:1;transform:translateX(-50%) translateY(0);pointer-events:auto}
+        .toast.success{border-color:rgba(34,197,94,0.3)}
+        .toast.error{border-color:rgba(239,68,68,0.3)}
+        .email-notify{position:fixed;top:64px;left:16px;right:16px;background:#111118;border:1px solid var(--border);border-radius:14px;padding:16px;z-index:2500;opacity:0;transform:translateY(-20px);pointer-events:none;transition:opacity 0.4s,transform 0.4s}
+        .email-notify.show{opacity:1;transform:translateY(0);pointer-events:auto}
+        .email-notify-header{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+        .email-notify-header i{color:var(--primary);font-size:20px}
+        .email-notify-header span{font-size:12px;font-weight:700;color:var(--text-light)}
+        .email-notify-body{font-size:13px;font-weight:600;line-height:1.6}
+        .email-notify-body strong{color:var(--primary)}
+        .empty-state{text-align:center;padding:36px 16px;color:var(--text-light)}
+        .empty-state i{font-size:44px;margin-bottom:12px;opacity:0.25;display:block}
+        .empty-state p{font-size:13px}
+        .hidden{display:none !important}
+        @media(min-width:700px){.gallery-grid{grid-template-columns:repeat(3,1fr);gap:14px}.art-card img{height:180px}.artists-grid{grid-template-columns:repeat(3,1fr);gap:12px}.admin-stats{grid-template-columns:repeat(4,1fr)}.hero-logo{font-size:72px}.hero h1{font-size:40px}.hero p{font-size:16px;max-width:480px}.page{padding:80px 5% 72px}.page-title{font-size:28px}}
+        @media(min-width:1000px){nav{display:flex !important;position:static;background:transparent;padding:0;flex-direction:row;gap:2px}nav a{padding:8px 12px;font-size:12px;border-radius:8px;width:auto}nav a i{display:none}.hamburger{display:none}.gallery-grid{grid-template-columns:repeat(4,1fr)}.artists-grid{grid-template-columns:repeat(4,1fr)}header{padding:14px 5%}}
+    </style>
+</head>
+<body>
+<div class="bg-fx"></div>
+<div id="toast" class="toast"></div>
+<div id="emailNotify" class="email-notify">
+    <div class="email-notify-header"><i class="material-icons">mail</i><span>رسالة جديدة</span></div>
+    <div class="email-notify-body" id="emailBody"></div>
+</div>
+<div id="authModal" class="modal-overlay">
+    <div class="modal">
+        <h2 id="authTitle">تسجيل الدخول</h2>
+        <div id="loginForm">
+            <div class="fg"><label>البريد الالكتروني</label><input type="email" id="loginEmail" placeholder="example@email.com"></div>
+            <div class="fg"><label>كلمة المرور</label><input type="password" id="loginPassword" placeholder="........"></div>
+            <button class="btn btn-primary" id="loginBtn">دخول</button>
+            <p class="modal-switch">ليس لديك حساب؟ <a id="toRegister">إنشاء حساب</a></p>
+        </div>
+        <div id="registerForm" class="hidden">
+            <div class="fg"><label>اسم المستخدم</label><input type="text" id="regName" placeholder="اسمك الفني"></div>
+            <div class="fg"><label>معرف المستخدم @</label><input type="text" id="regHandle" placeholder="username" dir="ltr" style="text-align:left"></div>
+            <div class="fg"><label>البريد الالكتروني</label><input type="email" id="regEmail" placeholder="example@email.com"></div>
+            <div class="fg"><label>كلمة المرور</label><input type="password" id="regPassword" placeholder="6 احرف على الاقل"></div>
+            <button class="btn btn-primary" id="regBtn">إنشاء حساب</button>
+            <p class="modal-switch">لديك حساب؟ <a id="toLogin">تسجيل الدخول</a></p>
+        </div>
+        <button class="btn btn-outline btn-sm" id="closeAuthBtn" style="margin-top:12px;width:100%;justify-content:center">إغلاق</button>
+    </div>
+</div>
+<header>
+    <div class="logo" id="logoBtn">Atelier</div>
+    <div class="nav-wrap">
+        <nav id="mainNav">
+            <a data-page="home"><i class="material-icons">home</i>الرئيسية</a>
+            <a data-page="gallery"><i class="material-icons">grid_view</i>المعرض</a>
+            <a data-page="leaderboard"><i class="material-icons">emoji_events</i>المتصدرين</a>
+            <a data-page="editor"><i class="material-icons">brush</i>رسم</a>
+            <a data-page="artists"><i class="material-icons">group</i>الفنانين</a>
+            <a data-page="profile"><i class="material-icons">person</i>البروفايل</a>
+            <a data-page="admin-riddles"><i class="material-icons">lock</i>التحكم</a>
+        </nav>
+        <button class="hamburger" id="hamburgerBtn"><i class="material-icons">menu</i></button>
+    </div>
+    <div class="header-actions">
+        <div id="authButtons"><button class="btn btn-primary btn-sm" id="openAuthBtn">دخول</button></div>
+        <div id="userMenu" class="hidden" style="display:none;align-items:center;gap:6px">
+            <button class="btn btn-sm btn-danger" id="logoutBtn">خروج</button>
+        </div>
+    </div>
+</header>
+<div id="page-home" class="page active">
+    <div class="hero">
+        <div class="hero-logo">Atelier</div>
+        <h1>حيث يلتقي<br>الفن بالابداع</h1>
+        <p>منصة فنية راقية للفنانين الرقميين لعرض اعمالهم والتعبير عن ابداعهم</p>
+        <button class="btn btn-primary" id="startBtn">ابدأ الآن</button>
+    </div>
+</div>
+<div class="stats-bar">
+    <div class="stat-item"><span class="stat-number" id="totalArtworks">0</span><span class="stat-label">لوحة</span></div>
+    <div class="stat-item"><span class="stat-number" id="totalUsers">0</span><span class="stat-label">فنان</span></div>
+    <div class="stat-item"><span class="stat-number" id="totalLikes">0</span><span class="stat-label">إعجاب</span></div>
+</div>
+<div id="page-gallery" class="page">
+    <h2 class="page-title">المعرض</h2>
+    <div class="title-line"></div>
+    <div id="galleryGrid" class="gallery-grid"></div>
+</div>
+<div id="page-leaderboard" class="page">
+    <h2 class="page-title">المتصدرين</h2>
+    <div class="title-line"></div>
+    <div id="leaderboardContent"></div>
+</div>
+<div id="page-editor" class="page">
+    <h2 class="page-title">استوديو الرسم</h2>
+    <div class="title-line"></div>
+    <div class="editor-area">
+        <div class="canvas-container"><canvas id="drawCanvas"></canvas></div>
+        <div class="tools-bar" id="toolsBar">
+            <button class="tool-btn active" data-tool="pencil"><i class="material-icons">edit</i></button>
+            <button class="tool-btn" data-tool="brush"><i class="material-icons">brush</i></button>
+            <button class="tool-btn" data-tool="marker"><i class="material-icons">format_paint</i></button>
+            <button class="tool-btn" data-tool="eraser"><i class="material-icons">auto_fix_high</i></button>
+            <button class="tool-btn" id="clearBtn"><i class="material-icons">delete_outline</i></button>
+            <button class="tool-btn" id="undoBtn"><i class="material-icons">undo</i></button>
+        </div>
+        <div class="color-section">
+            <div class="color-presets" id="colorPresets"></div>
+            <div class="color-picker-wrap">
+                <input type="color" class="color-picker" id="colorPicker" value="#000000">
+                <span style="font-size:11px;color:var(--text-light)">لون مخصص</span>
+            </div>
+        </div>
+        <div class="slider-row">
+            <label>الحجم</label>
+            <input type="range" id="brushSize" min="1" max="40" value="4">
+            <span id="brushSizeVal">4</span>
+        </div>
+        <div class="slider-row">
+            <label>الشفافية</label>
+            <input type="range" id="brushOpacity" min="10" max="100" value="100">
+            <span id="brushOpacityVal">100</span>
+        </div>
+        <div class="editor-form">
+            <div class="fg"><label>عنوان اللوحة</label><input type="text" id="artTitle" placeholder="عنوان اللوحة"></div>
+            <div class="fg"><label>الوصف</label><textarea id="artDesc" placeholder="وصف مختصر..."></textarea></div>
+            <button class="btn btn-primary btn-full" id="publishBtn"><i class="material-icons">upload</i>نشر اللوحة</button>
+        </div>
+    </div>
+</div>
+<div id="page-profile" class="page">
+    <div class="profile-header">
+        <div class="avatar-upload" id="avatarUpload">
+            <div class="avatar-ring"><div class="avatar-inner" id="profileAvatar">?</div></div>
+            <div class="avatar-edit-icon"><i class="material-icons">camera_alt</i></div>
+            <input type="file" id="avatarInput" accept="image/*" style="display:none">
+        </div>
+        <h2 class="profile-name" id="profileName">سجل دخولك</h2>
+        <p class="profile-handle" id="profileHandle">@guest</p>
+        <div class="profile-stats">
+            <div class="profile-stat"><span class="profile-stat-value" id="profileArtworks">0</span><span class="profile-stat-label">لوحة</span></div>
+            <div class="profile-stat"><span class="profile-stat-value" id="profileFollowers">0</span><span class="profile-stat-label">متابع</span></div>
+            <div class="profile-stat"><span class="profile-stat-value" id="profileLikes">0</span><span class="profile-stat-label">إعجاب</span></div>
+        </div>
+    </div>
+    <div class="edit-section">
+        <h3>تعديل الملف الشخصي</h3>
+        <div class="fg"><label>الاسم</label><input type="text" id="editName" placeholder="اسمك"></div>
+        <div class="fg"><label>المعرف @</label><input type="text" id="editHandle" placeholder="username" dir="ltr" style="text-align:left"></div>
+        <button class="btn btn-primary btn-full btn-sm" id="saveProfileBtn" style="margin-top:10px">حفظ التعديلات</button>
+    </div>
+    <h3 style="font-size:14px;font-weight:700;margin-bottom:12px">أحدث الأعمال</h3>
+    <div id="profileArtworksGrid" class="gallery-grid"></div>
+</div>
+<div id="page-artists" class="page">
+    <h2 class="page-title">الفنانين</h2>
+    <div class="title-line"></div>
+    <div id="artistsGrid" class="artists-grid"></div>
+</div>
+<div id="page-admin-riddles" class="page">
+    <div class="riddles-container">
+        <div class="lock-icon"><i class="material-icons">enhanced_encryption</i></div>
+        <h2 class="page-title" style="text-align:center">بوابة التحكم</h2>
+        <p class="page-sub" style="text-align:center">حل الألغاز الخمسة للوصول</p>
+        <div id="riddlesList"></div>
+        <button class="btn btn-primary" id="checkRiddlesBtn" style="margin-top:16px;padding:12px 36px"><i class="material-icons">lock_open</i>تحقق</button>
+        <p style="font-size:10px;color:var(--text-light);margin-top:8px">محاولتان فقط</p>
+    </div>
+</div>
+<div id="page-admin" class="page">
+    <h2 class="page-title">لوحة التحكم</h2>
+    <div class="title-line"></div>
+    <div class="admin-stats">
+        <div class="admin-stat-card"><div class="admin-stat-icon"><i class="material-icons">people</i></div><div><span class="admin-stat-number" id="adminUsers">0</span><span class="admin-stat-label">مستخدمين</span></div></div>
+        <div class="admin-stat-card"><div class="admin-stat-icon"><i class="material-icons">palette</i></div><div><span class="admin-stat-number" id="adminArtworks">0</span><span class="admin-stat-label">لوحات</span></div></div>
+        <div class="admin-stat-card"><div class="admin-stat-icon"><i class="material-icons">favorite</i></div><div><span class="admin-stat-number" id="adminLikes">0</span><span class="admin-stat-label">إعجابات</span></div></div>
+        <div class="admin-stat-card"><div class="admin-stat-icon"><i class="material-icons">visibility</i></div><div><span class="admin-stat-number" id="adminViews">0</span><span class="admin-stat-label">مشاهدات</span></div></div>
+    </div>
+    <h3 style="font-size:14px;font-weight:700;margin-bottom:10px">المستخدمين</h3>
+    <div class="admin-table">
+        <table>
+            <thead><tr><th>الاسم</th><th>البريد</th><th>لوحات</th><th>الحالة</th><th>إجراءات</th></tr></thead>
+            <tbody id="adminUsersTable"></tbody>
+        </table>
+    </div>
+</div>
+<script>
+(function() {
+    var DB = {
+        get: function(k) { try { var d = localStorage.getItem("at_" + k); return d ? JSON.parse(d) : null; } catch(e) { return null; } },
+        set: function(k, v) { try { localStorage.setItem("at_" + k, JSON.stringify(v)); } catch(e) {} },
+        getUsers: function() { return this.get("users") || {}; },
+        setUsers: function(u) { this.set("users", u); },
+        getArtworks: function() { return this.get("artworks") || []; },
+        setArtworks: function(a) { this.set("artworks", a); },
+        getStats: function() { return this.get("stats") || { totalArtworks: 0, totalLikes: 0, totalViews: 0 }; },
+        setStats: function(s) { this.set("stats", s); },
+        getSession: function() { return this.get("session"); },
+        setSession: function(s) { this.set("session", s); },
+        clearSession: function() { try { localStorage.removeItem("at_session"); } catch(e) {} }
+    };
+
+    var currentUser = null;
+    var currentPage = "home";
+    var riddleAttempts = 2;
+    var isDrawing = false;
+    var lastX = 0;
+    var lastY = 0;
+    var currentTool = "pencil";
+    var canvasHistory = [];
+    var historyIndex = -1;
+    var toastTimer = null;
+
+    var COLORS = ["#000000","#ffffff","#ef4444","#f97316","#eab308","#22c55e","#06b6d4","#3b82f6","#8b5cf6","#ec4899","#78716c","#1e293b","#7c2d12","#064e3b","#1e3a5f","#581c87"];
+
+    var RIDDLES = [
+        { q: "ما العدد الذي اذا ضربته في نفسه واضفت اليه نصفه حصلت على 50؟", a: "5" },
+        { q: "شيء يوجد في كل بيت لكن لا احد يراه ولا يلمسه ولا يسمعه؟", a: "الهواء" },
+        { q: "ما الشيء الذي كلما اخذت منه كبر؟", a: "الحفرة" },
+        { q: "ابن ام وابن اب لكن ليس اخ ولا اخت فمن هو؟", a: "نفسك" },
+        { q: "اذا كان عمري مضاعف عمرك وكان عمرنا معا 63 سنة فكم عمري؟", a: "42" }
+    ];
+
+    function $(id) { return document.getElementById(id); }
+
+    function showToast(msg, type) {
+        var t = $("toast");
+        t.textContent = msg;
+        t.className = "toast " + (type || "success") + " show";
+        if (toastTimer) clearTimeout(toastTimer);
+        toastTimer = setTimeout(function() { t.classList.remove("show"); }, 3000);
+    }
+
+    function showEmail(html) {
+        var el = $("emailNotify");
+        $("emailBody").innerHTML = html;
+        el.classList.add("show");
+        setTimeout(function() { el.classList.remove("show"); }, 5000);
+    }
+
+    function navigateTo(page) {
+        if ((page === "editor" || page === "profile") && !currentUser) {
+            $("authModal").classList.add("active");
+            showToast("يجب تسجيل الدخول اولا", "error");
+            return;
+        }
+        var pages = document.querySelectorAll(".page");
+        for (var i = 0; i < pages.length; i++) pages[i].classList.remove("active");
+        var el = $("page-" + page);
+        if (el) el.classList.add("active");
+        var navLinks = document.querySelectorAll("nav a");
+        for (var j = 0; j < navLinks.length; j++) navLinks[j].classList.remove("active");
+        var nl = document.querySelector('nav a[data-page="' + page + '"]');
+        if (nl) nl.classList.add("active");
+        currentPage = page;
+        window.scrollTo(0, 0);
+        $("mainNav").classList.remove("open");
+        if (page === "gallery") renderGallery();
+        if (page === "leaderboard") renderLeaderboard();
+        if (page === "artists") renderArtists();
+        if (page === "profile") renderProfile();
+        if (page === "admin") renderAdmin();
+        if (page === "editor") setTimeout(initCanvas, 50);
+        if (page === "admin-riddles") renderRiddles();
+    }
+
+    function updateAuthUI() {
+        if (currentUser) {
+            $("authButtons").style.display = "none";
+            $("userMenu").style.display = "flex";
+            $("userMenu").classList.remove("hidden");
+        } else {
+            $("authButtons").style.display = "";
+            $("userMenu").style.display = "none";
+        }
+    }
+
+    function register() {
+        var name = $("regName").value.trim();
+        var handle = $("regHandle").value.trim().replace("@", "");
+        var email = $("regEmail").value.trim();
+        var password = $("regPassword").value;
+        if (!name || !email || !password) { showToast("يرجى ملء جميع الحقول", "error"); return; }
+        if (password.length < 6) { showToast("كلمة المرور 6 احرف على الاقل", "error"); return; }
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showToast("بريد الكتروني غير صالح", "error"); return; }
+        if (!handle) handle = email.split("@")[0];
+        handle = handle.replace(/[^a-zA-Z0-9_]/g, "").toLowerCase();
+        if (!handle || handle.length < 3) { showToast("المعرف 3 احرف على الاقل", "error"); return; }
+        var users = DB.getUsers();
+        var keys = Object.keys(users);
+        for (var i = 0; i < keys.length; i++) {
+            if (users[keys[i]].email === email) { showToast("البريد مستخدم بالفعل", "error"); return; }
+            if (users[keys[i]].handle === handle) { showToast("المعرف مستخدم بالفعل", "error"); return; }
+        }
+        var uid = "u_" + Date.now() + "_" + Math.random().toString(36).substr(2, 6);
+        users[uid] = { name: name, handle: handle, email: email, password: password, artworks: 0, followers: 0, likes: 0, createdAt: Date.now(), specialty: "فنان رقمي", suspended: false, avatar: "" };
+        DB.setUsers(users);
+        DB.setSession({ uid: uid });
+        currentUser = users[uid];
+        currentUser._uid = uid;
+        updateAuthUI();
+        showEmail("لقد سجلت الدخول بحساب <strong>" + name + "</strong><br>مرحبا بك في Atelier");
+        showToast("تم إنشاء الحساب بنجاح", "success");
+        $("authModal").classList.remove("active");
+        $("regName").value = "";
+        $("regHandle").value = "";
+        $("regEmail").value = "";
+        $("regPassword").value = "";
+    }
+
+    function login() {
+        var email = $("loginEmail").value.trim();
+        var password = $("loginPassword").value;
+        if (!email || !password) { showToast("يرجى ملء جميع الحقول", "error"); return; }
+        var users = DB.getUsers();
+        var keys = Object.keys(users);
+        var found = null;
+        var foundUid = null;
+        for (var i = 0; i < keys.length; i++) {
+            if (users[keys[i]].email === email && users[keys[i]].password === password) {
+                found = users[keys[i]];
+                foundUid = keys[i];
+                break;
+            }
+        }
+        if (!found) { showToast("بيانات الدخول خاطئة", "error"); return; }
+        if (found.suspended) { showToast("هذا الحساب معلق", "error"); return; }
+        DB.setSession({ uid: foundUid });
+        currentUser = found;
+        currentUser._uid = foundUid;
+        updateAuthUI();
+        showEmail("لقد سجلت الدخول بحساب <strong>" + found.name + "</strong><br>مرحبا بعودتك");
+        showToast("تم تسجيل الدخول بنجاح", "success");
+        $("authModal").classList.remove("active");
+        $("loginEmail").value = "";
+        $("loginPassword").value = "";
+    }
+
+    function logout() {
+        DB.clearSession();
+        currentUser = null;
+        updateAuthUI();
+        showToast("تم تسجيل الخروج", "success");
+        navigateTo("home");
+    }
+
+    function initCanvas() {
+        var canvas = $("drawCanvas");
+        if (!canvas) return;
+        var w = canvas.parentElement.clientWidth;
+        canvas.width = w;
+        canvas.height = w;
+        var ctx = canvas.getContext("2d");
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(0, 0, w, w);
+        ctx.strokeStyle = "#000000";
+        ctx.lineWidth = 4;
+        ctx.lineCap = "round";
+        ctx.lineJoin = "round";
+        ctx.globalAlpha = 1;
+        canvasHistory = [];
+        historyIndex = -1;
+        saveCanvasState();
+    }
+
+    function saveCanvasState() {
+        var c = $("drawCanvas");
+        if (!c) return;
+        canvasHistory = canvasHistory.slice(0, historyIndex + 1);
+        canvasHistory.push(c.toDataURL());
+        if (canvasHistory.length > 30) canvasHistory.shift();
+        historyIndex = canvasHistory.length - 1;
+    }
+
+    function undoCanvas() {
+        if (historyIndex <= 0) return;
+        historyIndex--;
+        var c = $("drawCanvas");
+        if (!c) return;
+        var img = new Image();
+        img.onload = function() {
+            var ctx = c.getContext("2d");
+            ctx.clearRect(0, 0, c.width, c.height);
+            ctx.drawImage(img, 0, 0);
+        };
+        img.src = canvasHistory[historyIndex];
+    }
+
+    function getPos(e, canvas) {
+        var rect = canvas.getBoundingClientRect();
+        var sx = canvas.width / rect.width;
+        var sy = canvas.height / rect.height;
+        var cx, cy;
+        if (e.touches && e.touches.length > 0) {
+            cx = e.touches[0].clientX;
+            cy = e.touches[0].clientY;
+        } else {
+            cx = e.clientX;
+            cy = e.clientY;
+        }
+        return { x: (cx - rect.left) * sx, y: (cy - rect.top) * sy };
+    }
+
+    function setupCanvas() {
+        var c = $("drawCanvas");
+        if (!c) return;
+        c.addEventListener("mousedown", function(e) {
+            isDrawing = true;
+            var p = getPos(e, c);
+            lastX = p.x;
+            lastY = p.y;
+            c.getContext("2d").beginPath();
+            c.getContext("2d").arc(p.x, p.y, c.getContext("2d").lineWidth / 2, 0, Math.PI * 2);
+            c.getContext("2d").fill();
+        });
+        c.addEventListener("mousemove", function(e) {
+            if (!isDrawing) return;
+            var p = getPos(e, c);
+            var ctx = c.getContext("2d");
+            ctx.beginPath();
+            ctx.moveTo(lastX, lastY);
+            ctx.lineTo(p.x, p.y);
+            ctx.stroke();
+            lastX = p.x;
+            lastY = p.y;
+        });
+        c.addEventListener("mouseup", function() { if (isDrawing) { isDrawing = false; saveCanvasState(); } });
+        c.addEventListener("mouseleave", function() { if (isDrawing) { isDrawing = false; saveCanvasState(); } });
+        c.addEventListener("touchstart", function(e) {
+            e.preventDefault();
+            isDrawing = true;
+            var p = getPos(e, c);
+            lastX = p.x;
+            lastY = p.y;
+            c.getContext("2d").beginPath();
+            c.getContext("2d").arc(p.x, p.y, c.getContext("2d").lineWidth / 2, 0, Math.PI * 2);
+            c.getContext("2d").fill();
+        }, { passive: false });
+        c.addEventListener("touchmove", function(e) {
+            e.preventDefault();
+            if (!isDrawing) return;
+            var p = getPos(e, c);
+            var ctx = c.getContext("2d");
+            ctx.beginPath();
+            ctx.moveTo(lastX, lastY);
+            ctx.lineTo(p.x, p.y);
+            ctx.stroke();
+            lastX = p.x;
+            lastY = p.y;
+        }, { passive: false });
+        c.addEventListener("touchend", function() { if (isDrawing) { isDrawing = false; saveCanvasState(); } });
+    }
+
+    function setTool(tool, btn) {
+        currentTool = tool;
+        var btns = document.querySelectorAll(".tool-btn[data-tool]");
+        for (var i = 0; i < btns.length; i++) btns[i].classList.remove("active");
+        if (btn) btn.classList.add("active");
+        var c = $("drawCanvas");
+        if (!c) return;
+        var ctx = c.getContext("2d");
+        var size = parseInt($("brushSize").value);
+        var opacity = parseInt($("brushOpacity").value) / 100;
+        if (tool === "eraser") {
+            ctx.strokeStyle = "#ffffff";
+            ctx.lineWidth = 20;
+            ctx.globalAlpha = 1;
+        } else if (tool === "brush") {
+            ctx.strokeStyle = $("colorPicker").value;
+            ctx.lineWidth = size * 1.8;
+            ctx.globalAlpha = opacity * 0.6;
+        } else if (tool === "marker") {
+            ctx.strokeStyle = $("colorPicker").value;
+            ctx.lineWidth = size * 2.5;
+            ctx.globalAlpha = opacity * 0.35;
+        } else {
+            ctx.strokeStyle = $("colorPicker").value;
+            ctx.lineWidth = size;
+            ctx.globalAlpha = opacity;
+        }
+    }
+
+    function clearCanvas() {
+        var c = $("drawCanvas");
+        if (!c) return;
+        var ctx = c.getContext("2d");
+        ctx.globalAlpha = 1;
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(0, 0, c.width, c.height);
+        saveCanvasState();
+    }
+
+    function setupColors() {
+        var html = "";
+        for (var i = 0; i < COLORS.length; i++) {
+            var bc = COLORS[i] === "#ffffff" ? "rgba(255,255,255,0.3)" : "transparent";
+            var ac = i === 0 ? " active" : "";
+            html += '<div class="color-dot' + ac + '" style="background:' + COLORS[i] + ";border-color:" + bc + '" data-color="' + COLORS[i] + '"></div>';
+        }
+        $("colorPresets").innerHTML = html;
+        $("colorPresets").addEventListener("click", function(e) {
+            var dot = e.target.closest(".color-dot");
+            if (!dot) return;
+            var allDots = document.querySelectorAll(".color-dot");
+            for (var i = 0; i < allDots.length; i++) allDots[i].classList.remove("active");
+            dot.classList.add("active");
+            var color = dot.getAttribute("data-color");
+            $("colorPicker").value = color;
+            if (currentTool !== "eraser") {
+                var c = $("drawCanvas");
+                if (c) { c.getContext("2d").strokeStyle = color; c.getContext("2d").fillStyle = color; }
+            }
+        });
+    }
+
+    function publishArtwork() {
+        if (!currentUser) { $("authModal").classList.add("active"); return; }
+        var title = $("artTitle").value.trim() || "لوحة بدون عنوان";
+        var desc = $("artDesc").value.trim() || "";
+        var c = $("drawCanvas");
+        var imageData = c.toDataURL("image/jpeg", 0.5);
+        var artworks = DB.getArtworks();
+        artworks.push({ id: "a_" + Date.now(), title: title, description: desc, imageData: imageData, artistUid: currentUser._uid, artistName: currentUser.name, likes: 0, views: 0, createdAt: Date.now() });
+        DB.setArtworks(artworks);
+        var users = DB.getUsers();
+        if (users[currentUser._uid]) {
+            users[currentUser._uid].artworks = (users[currentUser._uid].artworks || 0) + 1;
+            DB.setUsers(users);
+            currentUser.artworks = users[currentUser._uid].artworks;
+        }
+        var stats = DB.getStats();
+        stats.totalArtworks = (stats.totalArtworks || 0) + 1;
+        DB.setStats(stats);
+        showToast("تم نشر اللوحة بنجاح", "success");
+        $("artTitle").value = "";
+        $("artDesc").value = "";
+        navigateTo("gallery");
+    }
+
+    function renderGallery() {
+        var grid = $("galleryGrid");
+        var artworks = DB.getArtworks();
+        if (artworks.length === 0) {
+            grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1"><i class="material-icons">palette</i><p>لا توجد لوحات بعد</p></div>';
+            return;
+        }
+        var sorted = artworks.slice().sort(function(a, b) { return b.createdAt - a.createdAt; });
+        var html = "";
+        for (var i = 0; i < sorted.length; i++) {
+            var a = sorted[i];
+            html += '<div class="art-card"><img src="' + a.imageData + '" alt="' + a.title + '" data-view="' + a.id + '"><div class="art-card-body"><div class="art-card-title">' + a.title + '</div><div class="art-card-artist">' + a.artistName + '</div><div class="art-card-stats"><span class="like-btn" data-like="' + a.id + '"><i class="material-icons">favorite</i>' + a.likes + '</span><span><i class="material-icons">visibility</i>' + a.views + '</span></div></div></div>';
+        }
+        grid.innerHTML = html;
+    }
+
+    function viewArtwork(id) {
+        var a = DB.getArtworks();
+        for (var i = 0; i < a.length; i++) {
+            if (a[i].id === id) { a[i].views = (a[i].views || 0) + 1; break; }
+        }
+        DB.setArtworks(a);
+        var s = DB.getStats();
+        s.totalViews = (s.totalViews || 0) + 1;
+        DB.setStats(s);
+        updateGlobalStats();
+        if (currentPage === "gallery") renderGallery();
+    }
+
+    function likeArtwork(id) {
+        if (!currentUser) { $("authModal").classList.add("active"); return; }
+        var a = DB.getArtworks();
+        var uid = null;
+        for (var i = 0; i < a.length; i++) {
+            if (a[i].id === id) { a[i].likes = (a[i].likes || 0) + 1; uid = a[i].artistUid; break; }
+        }
+        DB.setArtworks(a);
+        var s = DB.getStats();
+        s.totalLikes = (s.totalLikes || 0) + 1;
+        DB.setStats(s);
+        if (uid) {
+            var u = DB.getUsers();
+            if (u[uid]) { u[uid].likes = (u[uid].likes || 0) + 1; DB.setUsers(u); }
+        }
+        updateGlobalStats();
+        if (currentPage === "gallery") renderGallery();
+    }
+
+    function renderLeaderboard() {
+        var c = $("leaderboardContent");
+        var users = DB.getUsers();
+        var keys = Object.keys(users);
+        if (keys.length === 0) {
+            c.innerHTML = '<div class="empty-state"><i class="material-icons">emoji_events</i><p>لا يوجد متصدرين بعد</p></div>';
+            return;
+        }
+        var list = [];
+        for (var i = 0; i < keys.length; i++) {
+            var u = users[keys[i]];
+            list.push({ name: u.name, artworks: u.artworks || 0, likes: u.likes || 0, points: (u.artworks || 0) * 100 + (u.likes || 0) * 10 });
+        }
+        list.sort(function(a, b) { return b.points - a.points; });
+        var top3 = list.slice(0, 3);
+        var rest = list.slice(3);
+        var maxP = top3.length > 0 ? top3[0].points : 1;
+        if (maxP === 0) maxP = 1;
+        var html = '<div class="podium">';
+        var order = [1, 0, 2];
+        var cls = ["silver", "gold", "bronze"];
+        var medals = [2, 1, 3];
+        for (var j = 0; j < order.length; j++) {
+            var idx = order[j];
+            if (top3[idx]) {
+                var u = top3[idx];
+                html += '<div class="podium-item ' + cls[j] + '"><div class="podium-avatar">' + (u.name ? u.name.charAt(0) : "?") + '</div><div class="podium-name">' + u.name + '</div><div class="podium-points">' + u.points + '</div><div class="podium-bar">' + medals[j] + '</div></div>';
+            }
+        }
+        html += '</div>';
+        if (rest.length > 0) {
+            html += '<div class="rank-list">';
+            for (var k = 0; k < rest.length; k++) {
+                var r = rest[k];
+                html += '<div class="rank-item"><div class="rank-num">' + (k + 4) + '</div><div class="rank-name">' + r.name + '</div><div class="rank-arts">' + r.artworks + '</div><div class="rank-points">' + r.points + '</div></div>';
+            }
+            html += '</div>';
+        }
+        c.innerHTML = html;
+    }
+
+    function renderArtists() {
+        var grid = $("artistsGrid");
+        var users = DB.getUsers();
+        var keys = Object.keys(users);
+        if (keys.length === 0) {
+            grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1"><i class="material-icons">group</i><p>لا يوجد فنانين</p></div>';
+            return;
+        }
+        var html = "";
+        for (var i = 0; i < keys.length; i++) {
+            var u = users[keys[i]];
+            var avHtml = u.avatar ? '<img src="' + u.avatar + '" alt="">' : (u.name ? u.name.charAt(0) : "?");
+            html += '<div class="artist-card"><div class="artist-avatar">' + avHtml + '</div><div class="artist-name">' + u.name + '</div><div class="artist-specialty">' + (u.specialty || "فنان رقمي") + '</div><div class="artist-works">' + (u.artworks || 0) + ' لوحة</div><button class="btn btn-outline btn-sm btn-full" data-follow="' + keys[i] + '">متابعة</button></div>';
+        }
+        grid.innerHTML = html;
+    }
+
+    function followArtist(uid) {
+        if (!currentUser) { $("authModal").classList.add("active"); return; }
+        var u = DB.getUsers();
+        if (u[uid]) {
+            u[uid].followers = (u[uid].followers || 0) + 1;
+            DB.setUsers(u);
+            showToast("تم المتابعة", "success");
+            if (currentPage === "artists") renderArtists();
+        }
+    }
+
+    function uploadAvatar(e) {
+        var file = e.target.files[0];
+        if (!file || !currentUser) return;
+        var reader = new FileReader();
+        reader.onload = function(ev) {
+            var users = DB.getUsers();
+            if (users[currentUser._uid]) {
+                users[currentUser._uid].avatar = ev.target.result;
+                DB.setUsers(users);
+                currentUser.avatar = ev.target.result;
+                renderProfile();
+                showToast("تم تحديث الصورة", "success");
+            }
+        };
+        reader.readAsDataURL(file);
+    }
+
+    function saveProfile() {
+        if (!currentUser) return;
+        var name = $("editName").value.trim();
+        var handle = $("editHandle").value.trim().replace("@", "").replace(/[^a-zA-Z0-9_]/g, "").toLowerCase();
+        if (!name) { showToast("الاسم مطلوب", "error"); return; }
+        if (!handle || handle.length < 3) { showToast("المعرف 3 احرف على الاقل", "error"); return; }
+        var users = DB.getUsers();
+        var keys = Object.keys(users);
+        for (var i = 0; i < keys.length; i++) {
+            if (keys[i] !== currentUser._uid && users[keys[i]].handle === handle) { showToast("المعرف مستخدم بالفعل", "error"); return; }
+        }
+        users[currentUser._uid].name = name;
+        users[currentUser._uid].handle = handle;
+        DB.setUsers(users);
+        currentUser.name = name;
+        currentUser.handle = handle;
+        renderProfile();
+        showToast("تم حفظ التعديلات", "success");
+    }
+
+    function renderProfile() {
+        if (!currentUser) return;
+        var users = DB.getUsers();
+        var u = users[currentUser._uid];
+        if (!u) return;
+        $("profileName").textContent = u.name;
+        $("profileHandle").textContent = "@" + u.handle;
+        var avEl = $("profileAvatar");
+        if (u.avatar) { avEl.innerHTML = '<img src="' + u.avatar + '" alt="">'; }
+        else { avEl.innerHTML = u.name.charAt(0); }
+        $("profileArtworks").textContent = u.artworks || 0;
+        $("profileFollowers").textContent = u.followers || 0;
+        $("profileLikes").textContent = u.likes || 0;
+        $("editName").value = u.name;
+        $("editHandle").value = u.handle;
+        var grid = $("profileArtworksGrid");
+        var artworks = DB.getArtworks();
+        var my = [];
+        for (var i = 0; i < artworks.length; i++) { if (artworks[i].artistUid === currentUser._uid) my.push(artworks[i]); }
+        my.sort(function(a, b) { return b.createdAt - a.createdAt; });
+        my = my.slice(0, 6);
+        if (my.length === 0) {
+            grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1"><p>لم تنشر أي لوحات بعد</p></div>';
+            return;
+        }
+        var html = "";
+        for (var j = 0; j < my.length; j++) {
+            var a = my[j];
+            html += '<div class="art-card"><img src="' + a.imageData + '" alt="' + a.title + '"><div class="art-card-body"><div class="art-card-title">' + a.title + '</div><div class="art-card-stats"><span><i class="material-icons">favorite</i>' + a.likes + '</span><span><i class="material-icons">visibility</i>' + a.views + '</span></div></div></div>';
+        }
+        grid.innerHTML = html;
+    }
+
+    function renderRiddles() {
+        var c = $("riddlesList");
+        var html = "";
+        for (var i = 0; i < RIDDLES.length; i++) {
+            html += '<div class="riddle-card"><div class="riddle-header"><div class="riddle-number">' + (i + 1) + '</div><div class="riddle-text">' + RIDDLES[i].q + '</div></div><input type="text" class="riddle-input" id="riddle' + i + '" placeholder="الإجابة"></div>';
+        }
+        c.innerHTML = html;
+    }
+
+    function checkRiddles() {
+        if (riddleAttempts <= 0) { showToast("انتهت المحاولات", "error"); return; }
+        var ok = true;
+        for (var i = 0; i < RIDDLES.length; i++) {
+            var val = $("riddle" + i).value.trim();
+            if (val !== RIDDLES[i].a) { ok = false; break; }
+        }
+        riddleAttempts--;
+        if (ok) { showToast("تم فتح لوحة التحكم", "success"); navigateTo("admin"); }
+        else { showToast("اجابات خاطئة - متبقي " + riddleAttempts + " محاولات", "error"); }
+    }
+
+    function renderAdmin() {
+        var stats = DB.getStats();
+        $("adminArtworks").textContent = (stats.totalArtworks || 0).toLocaleString();
+        $("adminLikes").textContent = (stats.totalLikes || 0).toLocaleString();
+        $("adminViews").textContent = (stats.totalViews || 0).toLocaleString();
+        var users = DB.getUsers();
+        var keys = Object.keys(users);
+        $("adminUsers").textContent = keys.length;
+        var tbody = $("adminUsersTable");
+        if (keys.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:24px;color:var(--text-light)">لا يوجد مستخدمين</td></tr>';
+            return;
+        }
+        var html = "";
+        for (var i = 0; i < keys.length; i++) {
+            var u = users[keys[i]];
+            var sc = u.suspended ? "status-suspended" : "status-active";
+            var st = u.suspended ? "معلق" : "نشط";
+            var btnText = u.suspended ? "تفعيل" : "تعليق";
+            html += '<tr><td>' + u.name + '</td><td style="direction:ltr;text-align:right">' + u.email + '</td><td>' + (u.artworks || 0) + '</td><td><span class="status-badge ' + sc + '">' + st + '</span></td><td><div class="action-btns"><button class="btn btn-sm btn-danger" data-delete="' + keys[i] + '">حذف</button><button class="btn btn-sm btn-warning" data-suspend="' + keys[i] + '">' + btnText + '</button></div></td></tr>';
+        }
+        tbody.innerHTML = html;
+    }
+
+    function deleteUser(uid) {
+        if (!confirm("حذف هذا المستخدم؟")) return;
+        var users = DB.getUsers();
+        delete users[uid];
+        DB.setUsers(users);
+        var a = DB.getArtworks();
+        var f = [];
+        for (var i = 0; i < a.length; i++) { if (a[i].artistUid !== uid) f.push(a[i]); }
+        DB.setArtworks(f);
+        if (currentUser && currentUser._uid === uid) { logout(); return; }
+        showToast("تم حذف المستخدم", "success");
+        renderAdmin();
+        updateGlobalStats();
+    }
+
+    function toggleSuspend(uid) {
+        var users = DB.getUsers();
+        if (users[uid]) {
+            users[uid].suspended = !users[uid].suspended;
+            DB.setUsers(users);
+            showToast(users[uid].suspended ? "تم تعليق المستخدم" : "تم تفعيل المستخدم", "success");
+            renderAdmin();
+        }
+    }
+
+    function updateGlobalStats() {
+        var s = DB.getStats();
+        $("totalArtworks").textContent = (s.totalArtworks || 0).toLocaleString();
+        $("totalLikes").textContent = (s.totalLikes || 0).toLocaleString();
+        var u = DB.getUsers();
+        $("totalUsers").textContent = Object.keys(u).length;
+    }
+
+    function setupEvents() {
+        $("logoBtn").addEventListener("click", function() { navigateTo("home"); });
+        $("hamburgerBtn").addEventListener("click", function() { $("mainNav").classList.toggle("open"); });
+        $("openAuthBtn").addEventListener("click", function() { $("authModal").classList.add("active"); });
+        $("closeAuthBtn").addEventListener("click", function() { $("authModal").classList.remove("active"); });
+        $("toRegister").addEventListener("click", function() { $("loginForm").classList.add("hidden"); $("registerForm").classList.remove("hidden"); $("authTitle").textContent = "إنشاء حساب جديد"; });
+        $("toLogin").addEventListener("click", function() { $("registerForm").classList.add("hidden"); $("loginForm").classList.remove("hidden"); $("authTitle").textContent = "تسجيل الدخول"; });
+        $("loginBtn").addEventListener("click", login);
+        $("regBtn").addEventListener("click", register);
+        $("logoutBtn").addEventListener("click", logout);
+        $("startBtn").addEventListener("click", function() { navigateTo("editor"); });
+
+        document.querySelectorAll("nav a").forEach(function(a) {
+            a.addEventListener("click", function() {
+                var page = this.getAttribute("data-page");
+                if (page) navigateTo(page);
+            });
+        });
+
+        $("toolsBar").addEventListener("click", function(e) {
+            var btn = e.target.closest(".tool-btn[data-tool]");
+            if (btn) setTool(btn.getAttribute("data-tool"), btn);
+        });
+        $("clearBtn").addEventListener("click", clearCanvas);
+        $("undoBtn").addEventListener("click", undoCanvas);
+
+        $("colorPicker").addEventListener("input", function(e) {
+            var dots = document.querySelectorAll(".color-dot");
+            for (var i = 0; i < dots.length; i++) dots[i].classList.remove("active");
+            if (currentTool !== "eraser") {
+                var c = $("drawCanvas");
+                if (c) { c.getContext("2d").strokeStyle = e.target.value; c.getContext("2d").fillStyle = e.target.value; }
+            }
+        });
+
+        $("brushSize").addEventListener("input", function(e) {
+            $("brushSizeVal").textContent = e.target.value;
+            setTool(currentTool, null);
+        });
+
+        $("brushOpacity").addEventListener("input", function(e) {
+            $("brushOpacityVal").textContent = e.target.value;
+            setTool(currentTool, null);
+        });
+
+        $("publishBtn").addEventListener("click", publishArtwork);
+        $("avatarUpload").addEventListener("click", function() { $("avatarInput").click(); });
+        $("avatarInput").addEventListener("change", uploadAvatar);
+        $("saveProfileBtn").addEventListener("click", saveProfile);
+        $("checkRiddlesBtn").addEventListener("click", checkRiddles);
+
+        document.addEventListener("click", function(e) {
+            var likeBtn = e.target.closest(".like-btn");
+            if (likeBtn) { likeArtwork(likeBtn.getAttribute("data-like")); return; }
+            var viewImg = e.target.closest("[data-view]");
+            if (viewImg) { viewArtwork(viewImg.getAttribute("data-view")); return; }
+            var followBtn = e.target.closest("[data-follow]");
+            if (followBtn) { followArtist(followBtn.getAttribute("data-follow")); return; }
+            var deleteBtn = e.target.closest("[data-delete]");
+            if (deleteBtn) { deleteUser(deleteBtn.getAttribute("data-delete")); return; }
+            var suspendBtn = e.target.closest("[data-suspend]");
+            if (suspendBtn) { toggleSuspend(suspendBtn.getAttribute("data-suspend")); return; }
+        });
+
+        window.addEventListener("resize", function() { if (currentPage === "editor") initCanvas(); });
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+        var session = DB.getSession();
+        if (session && session.uid) {
+            var users = DB.getUsers();
+            if (users[session.uid]) {
+                currentUser = users[session.uid];
+                currentUser._uid = session.uid;
+                updateAuthUI();
+            } else {
+                DB.clearSession();
+            }
+        }
+        setupCanvas();
+        setupColors();
+        setupEvents();
+        updateGlobalStats();
+        renderGallery();
+        renderLeaderboard();
+        renderArtists();
+        renderRiddles();
+    });
+})();
+</script>
+</body>
+</html>
